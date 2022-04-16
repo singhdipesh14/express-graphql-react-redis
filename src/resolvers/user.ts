@@ -62,6 +62,7 @@ export class UserResolver {
 			.fork({})
 			.create(User, { username, password: hashedPassword })
 		await ctx.em.persistAndFlush(user)
+		ctx.req.session.userId = user.id
 		return { user }
 	}
 
@@ -83,8 +84,9 @@ export class UserResolver {
 				errors: [{ field: "password", message: "incorrect password" }],
 			}
 		}
-
+		// console.log("starting")
 		req.session.userId = user.id
+		// console.log(req)
 
 		return { user }
 	}
